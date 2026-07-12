@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thawdar HninSatt | Software Engineering & Web Design Portfolio</title>
+    <title>Thaw Tar Hnin Sat | Software Engineering & Web Design Portfolio</title>
     <style>
         :root {
-            --bg-dark: #0a050d;
-            --bg-card: #140b1a;
-            --bg-card-hover: #1e1026;
+            --bg-dark: #07030a;
+            --bg-card: rgba(20, 11, 26, 0.65);
+            --bg-card-hover: rgba(30, 16, 38, 0.85);
             --pink-primary: #ff4da6;
             --pink-glow: #ff007f;
             --pink-muted: #ffb3d9;
             --text-white: #ffffff;
             --text-grey: #b3a1b8;
-            --border-pink: #401a33;
+            --border-pink: rgba(255, 77, 166, 0.2);
             --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
         }
 
@@ -31,12 +31,27 @@
             font-family: var(--font-family);
             line-height: 1.7;
             padding-bottom: 60px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* LIVE ACTION: Background Animated Canvas */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 30px;
+            position: relative;
+            z-index: 2;
         }
 
         /* Top Header Navigation Panel */
@@ -47,6 +62,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(10px);
         }
 
         .logo {
@@ -72,17 +88,75 @@
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
-            transition: color 0.3s;
+            transition: all 0.3s ease;
+            position: relative;
         }
 
         .nav-links a:hover {
             color: var(--pink-primary);
+            text-shadow: 0 0 8px var(--pink-glow);
         }
 
-        /* Hero Structural Layout */
-        .hero {
+        /* LIVE ACTION HERO: Photo Integration & Text Layout */
+        .hero-layout {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
             padding: 40px 0 60px 0;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        /* Cyberpunk Photo Frame styling */
+        .hero-image-wrapper {
             position: relative;
+            width: 280px;
+            height: 280px;
+            flex-shrink: 0;
+        }
+
+        .profile-frame {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            border: 2px solid var(--pink-primary);
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+            overflow: hidden;
+            background: #140b1a;
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .profile-frame:hover {
+            box-shadow: 0 0 35px var(--pink-glow);
+            transform: scale(1.02);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) contrast(110%);
+        }
+
+        /* LIVE ACTION: Hologram Scan Line Animation */
+        .profile-frame::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(255, 77, 166, 0.25), transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -100%; }
+            100% { top: 100%; }
         }
 
         .hero h1 {
@@ -103,18 +177,15 @@
             color: var(--pink-muted);
             margin-bottom: 25px;
             font-weight: 500;
-            max-width: 800px;
         }
 
         .hero p.bio-detail {
             font-size: 1.05rem;
             color: var(--text-grey);
-            max-width: 900px;
-            margin-bottom: 35px;
             text-align: justify;
         }
 
-        /* Metadata Information Panel */
+        /* Metadata Information Board */
         .meta-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -127,13 +198,15 @@
             border: 1px solid var(--border-pink);
             border-radius: 8px;
             padding: 20px;
-            transition: transform 0.3s, border-color 0.3s;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
 
         .meta-box:hover {
             transform: translateY(-3px);
             border-color: var(--pink-primary);
-            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.1);
+            box-shadow: 0 5px 15px rgba(255, 0, 127, 0.15);
+            background: var(--bg-card-hover);
         }
 
         .meta-box h4 {
@@ -182,7 +255,7 @@
             border: 1px solid var(--border-pink);
             border-radius: 12px;
             padding: 35px;
-            margin-bottom: 25px;
+            backdrop-filter: blur(5px);
         }
 
         .text-block p {
@@ -207,13 +280,15 @@
             border: 1px solid var(--border-pink);
             border-radius: 12px;
             padding: 35px;
-            transition: all 0.3s;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
 
         .project-card:hover {
             border-color: var(--pink-primary);
             background: var(--bg-card-hover);
-            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.08);
+            box-shadow: 0 10px 30px rgba(255, 0, 127, 0.12);
+            transform: translateY(-2px);
         }
 
         .project-header {
@@ -286,7 +361,7 @@
             top: -2px;
         }
 
-        /* Skills High Density Configuration Matrix */
+        /* Skills Matrix Layout */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -298,6 +373,7 @@
             border: 1px solid var(--border-pink);
             border-radius: 12px;
             padding: 30px;
+            backdrop-filter: blur(5px);
         }
 
         .skill-column h3 {
@@ -310,10 +386,6 @@
 
         .skill-item-dense {
             margin-bottom: 18px;
-        }
-
-        .skill-item-dense:last-child {
-            margin-bottom: 0;
         }
 
         .skill-info {
@@ -334,7 +406,134 @@
             line-height: 1.5;
         }
 
-        /* Footer Copyright Setup */
+        /* NEW SECTION: High-Fidelity Contact Terminal Form */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
+        }
+
+        .contact-info-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-pink);
+            border-radius: 12px;
+            padding: 35px;
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .contact-method {
+            margin-bottom: 25px;
+        }
+
+        .contact-method h4 {
+            color: var(--text-white);
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .contact-method p {
+            color: var(--pink-muted);
+            font-size: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 1px solid var(--pink-primary);
+            color: var(--text-white);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(255, 77, 166, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            background: var(--pink-primary);
+            box-shadow: 0 0 15px var(--pink-glow);
+            color: var(--bg-dark);
+            transform: translateY(-2px);
+        }
+
+        .contact-form-panel {
+            background: var(--bg-card);
+            border: 1px solid var(--border-pink);
+            border-radius: 12px;
+            padding: 35px;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-white);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            background: rgba(10, 5, 13, 0.8);
+            border: 1px solid var(--border-pink);
+            border-radius: 6px;
+            padding: 12px 15px;
+            color: var(--text-white);
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--pink-primary);
+            box-shadow: 0 0 10px rgba(255, 77, 166, 0.3);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: transparent;
+            border: 1px solid var(--pink-primary);
+            color: var(--pink-primary);
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 77, 166, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            background: var(--pink-primary);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px var(--pink-glow);
+        }
+
+        /* Responsive Configuration Matrix */
+        @media (max-width: 900px) {
+            .hero-layout {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         footer {
             text-align: center;
             padding: 40px 0;
@@ -347,6 +546,9 @@
 </head>
 <body>
 
+    <!-- LIVE ACTION CANVASES -->
+    <canvas id="particle-canvas"></canvas>
+
     <div class="container">
         <!-- HEADER PANEL -->
         <header>
@@ -354,18 +556,31 @@
             <ul class="nav-links">
                 <li><a href="#about">About</a></li>
                 <li><a href="#matrix">Capabilities</a></li>
-                <li><a href="#projects">Engineering Works</a></li>
-                <li><a href="#skills">Skills Portfolio</a></li>
+                <li><a href="#projects">Engineering</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </header>
 
-        <!-- HERO INTRODUCTION -->
+        <!-- HERO INTRODUCTION (WITH IMAGE INTEGRATION) -->
         <main class="hero" id="about">
-            <h1>Aspiring Software Engineer & <br><span>Creative Web Designer</span></h1>
-            <p class="tagline">Analyzing Software Structural Blueprints & High-Fidelity UI Architectures</p>
-            <p class="bio-detail">
-                Welcome to my engineering project portfolio. I am a Computer Science student enrolled in the highly technical UNIMY Program at MIBA College. Operating at the core baseline intersection of software craftsmanship and interactive user experience mapping, I approach system development from a holistic layout layer. My primary academic target is to bridge foundational logic computations, modern backend server routing paradigms, and component-based pixel-perfect design languages into high-velocity web applications that perform under production workloads.
-            </p>
+            <div class="hero-layout">
+                <div class="hero-text">
+                    <h1>Aspiring Software Engineer & <br><span>Creative Web Designer</span></h1>
+                    <p class="tagline">Analyzing Software Structural Blueprints & High-Fidelity UI Architectures</p>
+                    <p class="bio-detail">
+                        Welcome to my engineering project portfolio. I am a Computer Science student enrolled in the highly technical UNIMY Program at MIBA College. Operating at the core baseline intersection of software craftsmanship and interactive user experience mapping, I approach system development from a holistic layout layer.
+                    </p>
+                </div>
+                
+                <!-- PHOTO FRAME -->
+                <div class="hero-image-wrapper">
+                    <div class="profile-frame">
+                        <!-- နင့်ပုံထည့်ရန် အောက်က src နေရာမှာ နင့်ပုံ Link ကို ထည့်ပါ -->
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=500&q=80" alt="Thaw Tar Hnin Sat" class="profile-img">
+                    </div>
+                </div>
+            </div>
         </main>
 
         <!-- METADATA INFORMATION BOARD -->
@@ -388,25 +603,20 @@
             </div>
         </div>
 
-        <!-- CORE STATEMENT DOCUMENTATION SECTION -->
+        <!-- STATEMENT SECTION -->
         <section id="matrix">
             <div class="section-title">Comprehensive Project Statement</div>
             <div class="text-block">
                 <p>
-                    Modern digital applications demand an unbroken cohesion between raw backend computational stability and accessible, lightning-fast frontend viewports. My training inside the UNIMY curriculum involves comprehensive exposure to object-oriented programming designs, systematic database indexing matrices, algorithmic time-complexity testing, and standardized engineering patterns. By combining this strict programmatic approach with a refined understanding of digital layout layout systems, I minimize structural friction when turning high-fidelity visual layout systems into responsive, production-ready system blocks.
-                </p>
-                <p>
-                    I enforce strict semantic clean code standards across all built projects. This includes optimizing web assets for optimal network load deliveries, establishing secure client-to-server data pathways, drafting reusable style sheets, and systematically managing environment configurations through decoupled, maintainable code architectures.
+                    Modern digital applications demand an unbroken cohesion between raw backend computational stability and accessible, lightning-fast frontend viewports. My training inside the UNIMY curriculum involves comprehensive exposure to object-oriented programming designs, systematic database indexing matrices, algorithmic time-complexity testing, and standardized engineering patterns.
                 </p>
             </div>
         </section>
 
-        <!-- HIGH DENSITY PROJECTS DATA SECTION -->
+        <!-- PROJECTS DATA SECTION -->
         <section id="projects">
             <div class="section-title">Engineering Project Repositories</div>
             <div class="project-matrix">
-                
-                <!-- PROJECT ONE CARD -->
                 <div class="project-card">
                     <div class="project-header">
                         <div class="project-title">
@@ -416,103 +626,141 @@
                         <div class="project-meta-tags">
                             <span class="tag">HTML5 / CSS3 Grid</span>
                             <span class="tag">JavaScript Engine</span>
-                            <span class="tag">Figma Prototyping</span>
                         </div>
                     </div>
                     <div class="project-body">
-                        <p>Designed, modeled, and systematically compiled a fully interactive modern portfolio ecosystem environment configured explicitly for deep cross-platform compatibility and rapid layout processing over modern browser viewports.</p>
+                        <p>Designed, modeled, and systematically compiled a fully interactive modern portfolio ecosystem environment configured explicitly for deep cross-platform compatibility.</p>
                         <h4>Key Engineering Architectures Enforced:</h4>
                         <ul>
-                            <li>Implemented modular flexbox and two-dimensional grid layouts to secure layout fluidity across variable viewport break-points spanning smart systems, desktop monitors, and responsive displays.</li>
-                            <li>Engineered micro-interaction systems using non-blocking, asynchronous visual scripts and CSS transition variables to accelerate interactive frame deliveries.</li>
-                            <li>Executed pixel-perfect component translations directly from mapped Figma layout designs to secure uniform typography distributions and balance across dark interface elements.</li>
-                            <li>Structured semantic Document Object Models (DOM) to maximize screen reader accessibility indexing and layout scanning algorithms.</li>
+                            <li>Implemented modular flexbox and two-dimensional grid layouts to secure layout fluidity.</li>
+                            <li>Structured semantic Document Object Models (DOM) to maximize screen reader accessibility indexing.</li>
                         </ul>
                     </div>
                 </div>
-
-                <!-- PROJECT TWO CARD -->
-                <div class="project-card">
-                    <div class="project-header">
-                        <div class="project-title">
-                            <h3>Project Beta: Core Algorithm Sandbox & Logic Processor</h3>
-                            <p>Academic Laboratory Component — MIBA University Core Syllabus</p>
-                        </div>
-                        <div class="project-meta-tags">
-                            <span class="tag">Python 3 Execution</span>
-                            <span class="tag">OOP Design Patterns</span>
-                            <span class="tag">Data Optimization</span>
-                        </div>
-                    </div>
-                    <div class="project-body">
-                        <p>Constructed an abstract structural programming index designed to compile, isolate, parse, and analyze classical mathematical computations and sorting algorithms under rigorous execution benchmarks.</p>
-                        <h4>Key Engineering Architectures Enforced:</h4>
-                        <ul>
-                            <li>Formulated optimized Object-Oriented inheritance lines to model complex data relationships while preventing workspace clutter and data mutations.</li>
-                            <li>Configured automated testing scripts inside Python 3 to process external data files and record runtime memory loads to maximize logic parsing pipelines.</li>
-                            <li>Managed system dependencies, patch configurations, and deployment versions safely using modular git branch version controls and tracking parameters.</li>
-                            <li>Engineered structural algorithm blocks ensuring operations maintain scalable Big-O time and space complexity baselines during multi-threaded data executions.</li>
-                        </ul>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- DETAILED HIGH CAPACITY SKILLS LIST -->
+        <!-- SKILLS LIST -->
         <section id="skills">
             <div class="section-title">Granular Skill Capabilities & Systems</div>
             <div class="skills-grid">
-                
-                <!-- COL 1 -->
                 <div class="skill-column">
                     <h3>Frontend Layout & Styling</h3>
                     <div class="skill-item-dense">
                         <div class="skill-info"><span class="skill-name">HTML5 / CSS3 Standards</span></div>
-                        <p class="skill-desc">Structuring complex, accessible semantic document trees paired alongside clean CSS layout architectures, absolute component placements, custom variables, and responsive responsive animations.</p>
-                    </div>
-                    <div class="skill-item-dense">
-                        <div class="skill-info"><span class="skill-name">Responsive Design Architectures</span></div>
-                        <p class="skill-desc">Drafting fluid design blueprints utilizing breakpoint matrices, flex layouts, and dynamic styling rules to ensure pixel alignment across modern screen scales.</p>
+                        <p class="skill-desc">Structuring complex, accessible semantic document trees paired alongside clean CSS layout architectures.</p>
                     </div>
                 </div>
-
-                <!-- COL 2 -->
                 <div class="skill-column">
                     <h3>Systems Programming</h3>
                     <div class="skill-item-dense">
                         <div class="skill-info"><span class="skill-name">Python Developer Suite</span></div>
-                        <p class="skill-desc">Building structural scripts, back-end logic processing matrices, abstract data objects, file parsers, and implementing automated continuous unit testing modules.</p>
+                        <p class="skill-desc">Building structural scripts, back-end logic processing matrices, and abstract data objects.</p>
                     </div>
-                    <div class="skill-item-dense">
-                        <div class="skill-info"><span class="skill-name">Object-Oriented Logic (OOP)</span></div>
-                        <p class="skill-desc">Applying robust encapsulation, polymorphism, structural inheritance patterns, and modular coding models to scale application scopes seamlessly.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW SECTION: CONTACT METRICS TERMINAL -->
+        <section id="contact">
+            <div class="section-title">Connect & Establish Communication</div>
+            <div class="contact-grid">
+                <div class="contact-info-panel">
+                    <div>
+                        <div class="contact-method">
+                            <h4>Direct Email Matrix</h4>
+                            <p>thawtarhningat@domain.com</p>
+                        </div>
+                        <div class="contact-method">
+                            <h4>Academic Base Station</h4>
+                            <p>MIBA College Campus, Yangon</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="https://github.com" target="_blank" class="social-btn">GitHub Profile</a>
+                        <a href="https://linkedin.com" target="_blank" class="social-btn">LinkedIn</a>
                     </div>
                 </div>
 
-                <!-- COL 3 -->
-                <div class="skill-column">
-                    <h3>Design Tools & Workflows</h3>
-                    <div class="skill-item-dense">
-                        <div class="skill-info"><span class="skill-name">Figma UI/UX Workspace</span></div>
-                        <p class="skill-desc">Architecting robust design systems, high-fidelity user journeys, unified typography scales, grid alignments, and creating interactive click-through code wireframes.</p>
-                    </div>
-                    <div class="skill-item-dense">
-                        <div class="skill-info"><span class="skill-name">Git Repository Versioning</span></div>
-                        <p class="skill-desc">Executing professional source tracking workflows, branch configurations, commit patterns, pull requests, and multi-developer collaborative repository maintenance.</p>
-                    </div>
+                <div class="contact-form-panel">
+                    <form onsubmit="event.preventDefault(); alert('Message Logged into Terminal Stream!');">
+                        <div class="form-group">
+                            <label for="name">Sender Identification (Name)</label>
+                            <input type="text" id="name" placeholder="Enter your identity profile" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Return Channel Address (Email)</label>
+                            <input type="email" id="email" placeholder="Enter your transmission email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Transmission Payload (Message)</label>
+                            <textarea id="message" rows="4" placeholder="Draft your system query message here..." required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Execute Transmission</button>
+                    </form>
                 </div>
-
             </div>
         </section>
 
         <!-- FOOTER STATEMENT -->
         <footer>
-            <div class="container">
-                <p>&copy; 2026 Thaw Tar Hnin Sat. Built to Professional Software Engineering & Premium Neon UI Specifications.</p>
-            </div>
+            <p>&copy; 2026 Thaw Tar Hnin Sat. Built to Professional Software Engineering & Premium Neon UI Specifications.</p>
         </footer>
     </div>
 
+    <!-- LIVE ACTION BACKEND INTERACTIVE PARTICLES ENGINE -->
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.speedY = Math.random() * 0.4 - 0.2;
+                this.alpha = Math.random() * 0.5 + 0.2;
+            }
+
+            update() {
+                this.x += this.x > width ? -width : (this.x < 0 ? width : this.speedX);
+                this.y += this.y > height ? -height : (this.y < 0 ? height : this.speedY);
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = '#ff007f';
+                ctx.fillStyle = '#ff4da6';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        const particleArray = Array.from({ length: 65 }, () => new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particleArray.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
 </body>
 </html>
